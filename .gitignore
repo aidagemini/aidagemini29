@@ -1,52 +1,141 @@
-# Prerequisites
-*.d
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <windows.h>
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+int d;
 
-# Linker output
-*.ilk
-*.map
-*.exp
+void encryptDecrypt(char message[], int key) {
+    for (int i = 0; message[i] != '\0'; ++i) {
+        char ch = message[i];
+        if (isalpha(ch)) {
+            char base = islower(ch) ? 'a' : 'A';
+            ch = (ch - base + key + 26) % 26 + base; // Adding 26 ensures positive modulo result
+        }
+        // Do nothing for non-alphabetic characters
+        message[i] = ch;
+    }
+}
 
-# Precompiled Headers
-*.gch
-*.pch
+void encryption() {
+    char message[1000];
+    int key = 9;
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
+    system("cls");
+    printf("Enter your message here:\n");
+    fgets(message, sizeof(message), stdin);
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
+    encryptDecrypt(message, key);
 
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
+    printf("\nEncrypted message:\n");
+    system("color 0");
+    puts(message);
+    system("color 0A");
+    Sleep(2000);
 
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
+    printf("\n\n\t\t# Press 'y' to continue!\n\n");
+    printf("\n\t\t# Press 'n' to continue!\n\n");
+    d = getche();
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+    if (d == 'y' || d == 'Y') {
+        system("cls");
+    } else if (d == 'n' || d == 'N') {
+        exit(1);
+    } else {
+        system("cls");
+        printf("\n\n\n\n");
+        printf("\n\t\tHey, don't press other keys, press only 'y' to continue and 'n' to exit!! :p");
+        d = getche();
+        if (d == 'y' || d == 'Y') {
+            system("cls");
+        }
+    }
+}
+
+void decryption() {
+    char message[1000];
+    int key = 9;
+
+    printf("\nEnter the message:\n");
+    fgets(message, sizeof(message), stdin);
+
+    encryptDecrypt(message, -key);
+
+    printf("\nDecrypted message:\n");
+    system("color 0F");
+    puts(message);
+    system("color 0A");
+    Sleep(2000);
+
+    printf("\n\n\t\t# Press 'y' to continue!\n\n");
+    printf("\n\t\t# Press 'n' to continue!\n\n");
+    d = getche();
+
+    if (d == 'y' || d == 'Y') {
+        system("cls");
+    } else if (d == 'n' || d == 'N') {
+        exit(1);
+    } else {
+        system("cls");
+        printf("\n\n\n\n");
+        printf("\n\t\tHey, don't press other keys, press only 'y' to continue and 'n' to exit!! :p");
+        d = getche();
+        if (d == 'y' || d == 'Y') {
+            system("cls");
+        }
+    }
+}
+
+int main() {
+    int c;
+
+    printf("Author: arghac14");
+    system("color 0A");
+    printf("\n\n\n\n");
+    printf("\t\t______________________C I P H E R______________________\n");
+    printf("\t\t| Cipher is a secret or distinguished way of writing.   |\n");
+    printf("\t\t| Here you can type any secret message and it will be  |\n");
+    printf("\t\t| fully encrypted so that any unauthorized party can't |\n");
+    printf("\t\t| read. Further, you can decrypt it in its original form.|\n");
+    printf("\t\t|______________________________________________________|\n");
+    Sleep(2000);
+    printf("\n\n\t\tPress 'y' to continue!\n");
+    Sleep(10);
+
+    d = getche();
+    if (d == 'y' || d == 'Y') {
+        system("cls");
+    } else {
+        system("cls");
+        printf("\n\n\n\n");
+        printf("\n\t\tHey, don't press other keys, press only 'y' to continue!! :p");
+        d = getche();
+        if (d == 'y' || d == 'Y') {
+            system("cls");
+        }
+    }
+
+    while (1) {
+        printf("\n\n\n\n");
+        printf("\t\t______________________C I P H E R______________________\n");
+        printf("\t\t| Press 1 for Encryption >>>>>>>>>>>>>>>  1            |\n");
+        printf("\t\t|                                                      |\n");
+        printf("\t\t| Press 2 for Decryption >>>>>>>>>>>>>>>  2            |\n");
+        printf("\t\t|______________________________________________________|\n");
+
+        Sleep(1000);
+        printf("\n\n\t\tEnter your choice:");
+        c = getche();
+        if (c == '1') {
+            encryption();
+        } else if (c == '2') {
+            decryption();
+        } else {
+            printf("Invalid choice!");
+            exit(1);
+        }
+    }
+
+    return 0;
+}
+
