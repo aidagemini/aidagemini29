@@ -1,99 +1,140 @@
-import tkinter as tk
-from tkinter import messagebox
-import sqlite3
-from cryptography.fernet import Fernet, InvalidToken
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <windows.h>
 
-def create_table():
-    conn = sqlite3.connect("passwords.db")
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS passwords (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT NOT NULL,
-            password TEXT NOT NULL
-        )
-    """)
-    conn.commit()
-    conn.close()
+int d;
 
-def get_key():
-    try:
-        with open("encryption_key.key", "rb") as key_file:
-            key = key_file.read()
-    except FileNotFoundError:
-        key = Fernet.generate_key()
-        with open("encryption_key.key", "wb") as key_file:
-            key_file.write(key)
-    return key
+void encryptDecrypt(char message[], int key) {
+    for (int i = 0; message[i] != '\0'; ++i) {
+        char ch = message[i];
+        if (isalpha(ch)) {
+            char base = islower(ch) ? 'a' : 'A';
+            ch = (ch - base + key + 26) % 26 + base; // Adding 26 ensures positive modulo result
+        }
+        // Do nothing for non-alphabetic characters
+        message[i] = ch;
+    }
+}
 
-def encrypt_password(password):
-    key = get_key()
-    cipher_suite = Fernet(key)
-    encrypted_password = cipher_suite.encrypt(password.encode()).decode()
-    return encrypted_password
+void encryption() {
+    char message[1000];
+    int key = 9;
 
-def decrypt_password(encrypted_password):
-    key = get_key()
-    cipher_suite = Fernet(key)
-    try:
-        decrypted_password = cipher_suite.decrypt(encrypted_password.encode()).decode()
-        return decrypted_password
-    except InvalidToken as e:
-        print(f"Error decrypting password: {e}")
-        return "Decryption Error"
+    system("cls");
+    printf("Enter your message here:\n");
+    fgets(message, sizeof(message), stdin);
 
-def save_password():
-    username = entry_username.get()
-    password = entry_password.get()
+    encryptDecrypt(message, key);
 
-    if not username or not password:
-        messagebox.showerror("Error", "Please enter both username and password.")
-        return
+    printf("\nEncrypted message:\n");
+    system("color 0");
+    puts(message);
+    system("color 0A");
+    Sleep(2000);
 
-    encrypted_password = encrypt_password(password)
+    printf("\n\n\t\t# Press 'y' to continue!\n\n");
+    printf("\n\t\t# Press 'n' to continue!\n\n");
+    d = getche();
 
-    conn = sqlite3.connect("passwords.db")
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO passwords (username, password) VALUES (?, ?)", (username, encrypted_password))
-    conn.commit()
-    conn.close()
+    if (d == 'y' || d == 'Y') {
+        system("cls");
+    } else if (d == 'n' || d == 'N') {
+        exit(1);
+    } else {
+        system("cls");
+        printf("\n\n\n\n");
+        printf("\n\t\tHey, don't press other keys, press only 'y' to continue and 'n' to exit!! :p");
+        d = getche();
+        if (d == 'y' || d == 'Y') {
+            system("cls");
+        }
+    }
+}
 
-    messagebox.showinfo("Success", "Password saved successfully.")
+void decryption() {
+    char message[1000];
+    int key = 9;
 
-def show_passwords():
-    conn = sqlite3.connect("passwords.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT username, password FROM passwords")
-    results = cursor.fetchall()
-    conn.close()
+    printf("\nEnter the message:\n");
+    fgets(message, sizeof(message), stdin);
 
-    if not results:
-        messagebox.showinfo("Info", "No passwords saved.")
-    else:
-        passwords_str = "\n".join(f"Username: {result[0]}, Password: {decrypt_password(result[1])}" for result in results)
-        messagebox.showinfo("Saved Passwords", f"Saved Passwords:\n{passwords_str}")
+    encryptDecrypt(message, -key);
 
-root = tk.Tk()
-root.title("Password Manager")
+    printf("\nDecrypted message:\n");
+    system("color 0F");
+    puts(message);
+    system("color 0A");
+    Sleep(2000);
 
-create_table()
+    printf("\n\n\t\t# Press 'y' to continue!\n\n");
+    printf("\n\t\t# Press 'n' to continue!\n\n");
+    d = getche();
 
-label_username = tk.Label(root, text="Username:")
-label_username.grid(row=0, column=0, padx=10, pady=10, sticky="e")
+    if (d == 'y' || d == 'Y') {
+        system("cls");
+    } else if (d == 'n' or d == 'N') {
+        exit(1);
+    } else {
+        system("cls");
+        printf("\n\n\n\n");
+        printf("\n\t\tHey, don't press other keys, press only 'y' to continue and 'n' to exit!! :p");
+        d = getche();
+        if (d == 'y' || d == 'Y') {
+            system("cls");
+        }
+    }
+}
 
-entry_username = tk.Entry(root)
-entry_username.grid(row=0, column=1, padx=10, pady=10, sticky="w")
+int main() {
+    int c;
 
-label_password = tk.Label(root, text="Password:")
-label_password.grid(row=1, column=0, padx=10, pady=10, sticky="e")
+    printf("Author: arghac14");
+    system("color 0A");
+    printf("\n\n\n\n");
+    printf("\t\t______________________C I P H E R______________________\n");
+    printf("\t\t| Cipher is a secret or distinguished way of writing.   |\n");
+    printf("\t\t| Here you can type any secret message and it will be  |\n");
+    printf("\t\t| fully encrypted so that any unauthorized party can't |\n");
+    printf("\t\t| read. Further, you can decrypt it in its original form.|\n");
+    printf("\t\t|______________________________________________________|\n");
+    Sleep(2000);
+    printf("\n\n\t\tPress 'y' to continue!\n");
+    Sleep(10);
 
-entry_password = tk.Entry(root)
-entry_password.grid(row=1, column=1, padx=10, pady=10, sticky="w")
+    d = getche();
+    if (d == 'y' || d == 'Y') {
+        system("cls");
+    } else {
+        system("cls");
+        printf("\n\n\n\n");
+        printf("\n\t\tHey, don't press other keys, press only 'y' to continue!! :p");
+        d = getche();
+        if (d == 'y' || d == 'Y') {
+            system("cls");
+        }
+    }
 
-button_save = tk.Button(root, text="Save Password", command=save_password)
-button_save.grid(row=2, column=0, columnspan=2, pady=10)
+    while (1) {
+        printf("\n\n\n\n");
+        printf("\t\t______________________C I P H E R______________________\n");
+        printf("\t\t| Press 1 for Encryption >>>>>>>>>>>>>>>  1            |\n");
+        printf("\t\t|                                                      |\n");
+        printf("\t\t| Press 2 for Decryption >>>>>>>>>>>>>>>  2            |\n");
+        printf("\t\t|______________________________________________________|\n");
 
-button_show_passwords = tk.Button(root, text="Show Saved Passwords", command=show_passwords)
-button_show_passwords.grid(row=3, column=0, columnspan=2, pady=10)
+        Sleep(1000);
+        printf("\n\n\t\tEnter your choice:");
+        c = getche();
+        if (c == '1') {
+            encryption();
+        } else if (c == '2') {
+            decryption();
+        } else {
+            printf("Invalid choice!");
+            exit(1);
+        }
+    }
 
-root.mainloop()
+    return 0;
+}
